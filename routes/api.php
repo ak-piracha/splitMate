@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PrincipalTenantController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\TenantController;
+use L5Swagger\L5Swagger;
 
 
 /*
@@ -18,6 +19,7 @@ use App\Http\Controllers\TenantController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

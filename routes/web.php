@@ -13,6 +13,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// use L5Swagger\GeneratorFactory;
+
+// Route::get('/generate-docs', function () {
+//     if (app()->environment('local')) {
+//         $factory = new GeneratorFactory();
+//         $factory->make()->generateDocs();
+//         return 'Swagger docs generated';
+//     }
+//     return 'Not allowed in this environment';
+// });
+
 Route::get('/', function () {
     return view('welcome');
 });
