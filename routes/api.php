@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PrincipalTenantController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\TenantController;
+use App\Http\Controllers\ApplianceController;
+use App\Http\Controllers\UsageLogController;
+use App\Http\Controllers\PlaceController;
 use L5Swagger\L5Swagger;
 
 
@@ -30,12 +33,36 @@ Route::post('login', [AuthController::class, 'login']);
 Route::post('password/reset', [AuthController::class, 'resetPassword']);
 
 Route::middleware('auth:sanctum')->group(function () {
+
     Route::put('profile', [AuthController::class, 'updateProfile']);
     Route::post('logout', [AuthController::class, 'logout']);
     Route::get('users', [AuthController::class, 'listUsers']);
     Route::get('users/{id}', [AuthController::class, 'viewUser']);
     Route::put('users/{id}/role', [AuthController::class, 'updateUserRole']);
     Route::post('password/change', [AuthController::class, 'changePassword']);
+
+    // Place management
+    Route::post('places', [PlaceController::class, 'addPlace']);
+    Route::get('places', [PlaceController::class, 'viewPlaces']);
+    Route::put('places/{id}', [PlaceController::class, 'editPlace']);
+    Route::delete('places/{id}', [PlaceController::class, 'deletePlace']);
+    Route::post('places/{place_id}/assign-tenant', [PlaceController::class, 'assignTenantToPlace']);
+    Route::get('places/{place_id}/tenants', [PlaceController::class, 'viewTenantsInPlace']);
+
+    // Tenant registration
+    Route::post('register-tenant', [AuthController::class, 'registerTenant']);
+
+    // Appliances management
+    Route::post('appliances', [ApplianceController::class, 'addAppliance']);
+    Route::get('places/{place_id}/appliances', [ApplianceController::class, 'viewAppliances']);
+    Route::put('appliances/{id}', [ApplianceController::class, 'editAppliance']);
+    Route::delete('appliances/{id}', [ApplianceController::class, 'deleteAppliance']);
+
+    // Usage logs and billing
+    Route::post('usage/start', [UsageLogController::class, 'startUsage']);
+    Route::post('usage/{id}/stop', [UsageLogController::class, 'stopUsage']);
+    Route::get('appliances/{appliance_id}/logs', [UsageLogController::class, 'viewLogs']);
+    Route::get('bill', [UsageLogController::class, 'viewBill']);
 });
 
 Route::middleware('auth:sanctum', 'verified')->group(function () {

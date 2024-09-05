@@ -52,4 +52,14 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(User::class, 'principal_tenant_id');
     }
+
+    public function places()
+    {
+        return $this->hasMany(Place::class, 'principal_tenant_id');
+    }
+
+    public function assignedPlaces()
+    {
+        return $this->belongsToMany(Place::class, 'place_tenant', 'tenant_id', 'place_id');
+    }
 }

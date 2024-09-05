@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Place;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -61,7 +62,7 @@ class AuthController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
-        $user = User::create([
+        User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
@@ -446,4 +447,29 @@ class AuthController extends Controller
 
         return response()->json(['message' => 'Password changed successfully']);
     }
+
+    public function registerTenant(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'email' => 'required|string|email|max:255|unique:users,email',
+        'property_id' => 'required|string|exists:places,unique_id',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json($validator->errors(), 400);
+    }
+
+    $place = Place::where('unique_id', $request->property_id)->first();
+
+    $tenant = User::create([
+        'email' => $request->email,
+        'role' => 'tenant',
+        'principal_tenant_id' => $place->principal_tenant_id,
+    ]);
+
+    $place->tenants()->attach($tenant->id);
+
+    return response()->json(['message' => 'Tenant registered successfully', 'tenant' => $tenant], 201);
+}
+
 }
