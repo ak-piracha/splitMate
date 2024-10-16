@@ -76,7 +76,7 @@ Route::post('password/reset', [AuthController::class, 'resetPassword']);
 
 Route::middleware(['auth:sanctum', 'role:principal_tenant'])->group(function () {
     Route::post('tenants', [PrincipalTenantController::class, 'createTenant']);
-    Route::get('tenants', [PrincipalTenantController::class, 'viewTenants']);
+    Route::get('tenants', action: [PrincipalTenantController::class, 'viewTenants']);
 });
 
 
